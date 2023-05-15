@@ -1,105 +1,80 @@
-#ifndef __MONTY_H__
-
-#define __MONTY_H__
-
-
-
-#include <stdlib.h>
+#ifndef MONTY_H
+#define MONTY_H
 
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <string.h>
 
-#include <unistd.h>
-
-
-
-
-
 /**
-
  * struct stack_s - doubly linked list representation of a stack (or queue)
-
  * @n: integer
-
  * @prev: points to the previous element of the stack (or queue)
-
  * @next: points to the next element of the stack (or queue)
-
  *
-
  * Description: doubly linked list node structure
-
- * for stack, queues, LIFO, FIFO
-
+ * for stack, queues, LIFO, FIFO Holberton project
  */
-
 typedef struct stack_s
-
 {
-  
   int n;
-  
   struct stack_s *prev;
-  
   struct stack_s *next;
-  
 } stack_t;
 
-
-
 /**
-
  * struct instruction_s - opcode and its function
-
  * @opcode: the opcode
-
  * @f: function to handle the opcode
-
  *
-
  * Description: opcode and its function
-
- * for stack, queues, LIFO, FIFO
-
+ * for stack, queues, LIFO, FIFO Holberton project
  */
-
 typedef struct instruction_s
-
 {
-  
   char *opcode;
-  
   void (*f)(stack_t **stack, unsigned int line_number);
-  
 } instruction_t;
 
+/**
+ * struct buffer - structure to store the buffer
+ * @fd: File descriptor
+ * @line: Line to getline
+ *
+ * Description: To handle the file and getline
+ */
+typedef struct buffer
+{
+  FILE *fd;
+  char *line;
+} buffer_t;
 
+extern buffer_t buffer;
+extern int value;
 
-void push(stack_t **stack, unsigned int line_number);
+void execute_cmd(char *argv);
 
-void pall(stack_t **stack, __attribute__((unused))unsigned int line_number);
+int get_opc(stack_t **stack, char *arg, char *item, int count);
 
-void pint(stack_t **stack, unsigned int line_number);
+void _push(stack_t **stack, unsigned int line_number);
+void _pall(stack_t **stack, unsigned int line_number);
+void _pint(stack_t **stack, unsigned int line_number);
+void _swap(stack_t **stack, unsigned int line_number);
+void _pop(stack_t **stack, unsigned int line_number);
+void _add(stack_t **stack, unsigned int line_number);
+void _nop(stack_t **stack, unsigned int line_number);
+void free_dlistint(stack_t *stack);
 
-void pop(stack_t **stack, unsigned int line_number);
+/*Help*/
+int _isdigit(char *c);
+stack_t *new_Node(int n);
 
-void nop(__attribute__((unused))stack_t **stack, __attribute__((unused))unsigned int line_number);
+/* handle_errors */
+void push_error(FILE *fd, char *line, stack_t *stack, int count);
+void ins_error(FILE *fd, char *line, stack_t *stack, char *count, int item);
 
-void swap(stack_t **stack, unsigned int line_number);
-
-void add(stack_t **stack, unsigned int line_number);
-
-void find_opcode(char *opcode, stack_t **stack, unsigned int line_number);
-
-void free_stack(stack_t *stack);
-
-void sub(stack_t **stack, unsigned int line_number);
-
-void _div(stack_t **stack, unsigned int line_number);
-
-
-
-#endif /* __MONTY_H__ */
-
-
+#endif
